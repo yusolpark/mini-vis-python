@@ -1,4 +1,6 @@
 #open connection to controller
+cs = c_com(cs, 'Connect')
+
 class CS (object):
     def __init__(self, port, expname, directory, trial_duration, randomize,param):
         self.port = port 
@@ -43,7 +45,7 @@ cs = c_com(cs, 'Start-Grating') #start gratings
 current_time = time.time()
 elapsed_time = current_time - start_time
 
-while (elapsed_time < cs1.trial_duration) : #delay until next trial
+while elapsed_time < cs1.trial_duration : #delay until next trial
     time.sleep(0.001)
 
 #end_time = time.time();
@@ -52,6 +54,7 @@ cs = c_com(cs, 'Get-Data') #retrieve data sent from controller
 
 ## save data for current experiment
 filename =  time.strftime("%Y-%m-%d %H-%M-%S")+' '+cs1.expname+' CS.py'
+
 import os
 newfolder = os.path.basename
 
