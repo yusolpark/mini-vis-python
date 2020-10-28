@@ -2,7 +2,7 @@
 cs = c_com(cs, 'Connect')
 
 class CS (object):
-    def __init__(self, port, expname, directory, trial_duration, randomize,param):
+    def __init__(self, port, expname, directory, trial_duration, randomize):
         self.port = port 
         self.expname = expname
         self.directory = directory
@@ -29,13 +29,13 @@ class PAR(object):
 param1 = PAR(100,[0 0 30],[0 0 0],[0 0 15],20,1,0,1.5,[0, 0],0,2,5)
 
 #set experiment parameters
-cs1 = CS('COM7','directional_test_stimulus1', 'Users/Matthew/Documents/Schaffer-Nishimura Lab/Visual Stimulation/Data', 3, 0, param1) 
+cs1 = CS('COM7','directional_test_stimulus1', 'Users/Matthew/Documents/Schaffer-Nishimura Lab/Visual Stimulation/Data', 3, 0) 
 
 cs = c_com(cs, 'Send-Parameters') #send grating parameters to controller
 cs = c_com(cs, 'Fill-Background') #fill display with background color
 
 ## send stimulus
-#cs1.param.angle = 0
+#param1.angle = 0
 
 import time 
 start_time = time.time()
