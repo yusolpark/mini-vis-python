@@ -8,6 +8,7 @@ class CS (object):
         self.directory = directory
         self.trial_duration = trial_duration
         self.randomize = randomize #1=randomize order of conditions, 0=don't randomize
+        self.data = data #where data is saved 
 
 
 class PAR(object):
@@ -50,7 +51,7 @@ while elapsed_time < cs1.trial_duration : #delay until next trial
 
 #end_time = time.time();
 cs = c_com(cs, 'Get-Data') #retrieve data sent from controller
-
+cs1.data = cs
 
 ## save data for current experiment
 filename =  time.strftime("%Y-%m-%d %H-%M-%S")+' '+cs1.expname+' CS.py'
@@ -61,8 +62,12 @@ newfolder = os.path.basename
 if not os.path.exists(newfolder):
     os.makedirs(newfolder)
 
-completeName = os.path.join(cs1.directory, filename)
-File = open(completeName,'cs')
+import pickle
+with open (filename,'wb') as f:
+    pickle.dump(cs1,f)
+
+# completeName = os.path.join(cs1.directory, filename)
+# File = open(completeName,'cs')
 
 # close connection
 cs = c_com(cs, 'Disconnect') #close connection to controller
