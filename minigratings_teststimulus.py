@@ -30,7 +30,7 @@ class PAR(object):
 param1 = PAR(100,[0 0 30],[0 0 0],[0 0 15],20,1,0,1.5,[0, 0],0,2,5)
 
 #set experiment parameters
-cs1 = CS('COM7','directional_test_stimulus1', 'Users/Matthew/Documents/Schaffer-Nishimura Lab/Visual Stimulation/Data', 3, 0) 
+cs = CS('COM7','directional_test_stimulus1', 'Users/Matthew/Documents/Schaffer-Nishimura Lab/Visual Stimulation/Data', 3, 0) 
 
 cs = c_com(cs, 'Send-Parameters') #send grating parameters to controller
 cs = c_com(cs, 'Fill-Background') #fill display with background color
@@ -46,12 +46,12 @@ cs = c_com(cs, 'Start-Grating') #start gratings
 current_time = time.time()
 elapsed_time = current_time - start_time
 
-while elapsed_time < cs1.trial_duration : #delay until next trial
+while elapsed_time < cs.trial_duration : #delay until next trial
     time.sleep(0.001)
 
 #end_time = time.time();
 cs = c_com(cs, 'Get-Data') #retrieve data sent from controller
-cs1.data = cs
+cs.data = cs
 
 ## save data for current experiment
 filename =  time.strftime("%Y-%m-%d %H-%M-%S")+' '+cs1.expname+' CS.py'
@@ -64,7 +64,7 @@ if not os.path.exists(newfolder):
 
 import pickle
 with open (filename,'wb') as f:
-    pickle.dump(cs1,f)
+    pickle.dump(cs,f)
 
 # completeName = os.path.join(cs1.directory, filename)
 # File = open(completeName,'cs')

@@ -18,64 +18,50 @@ LIST OF COMMANDS:
 '''
 #set-up
 import time
-csLen = len(cs) + 1
+import serial
+with serial.Serial('/dev/cu.usbmodem142101',9600) as ser:
+
 
 def Get-Version():
-    for i in range(1,csLen)
-            fwrite(cs(i).controller,0,'uint8') #command to send back version number
-            cs(i) = Grating_C2M(cs(i)) #read version number
+    ser.write(0) #command to send back version number
+    cs = Grating_C2M(cs) #read version number
 
 def Connect():
-    for i in range(1,csLen)
-            cs(i).controller = serial(cs(i).port,'BaudRate',9600) #define serial port
-            fopen(cs(i).controller) #open connection to serial port
-        
-    time.sleep(3) #wait for connection(s) to be established
-    for i in range(1,csLen)
-            fwrite(cs(i).controller,104,'uint8') #turns display backlight on
-            cs(i).data = [] #create empty data structure
-            cs(i).datanames = {}
+   ser.write(104) #turns display backlight on
+    
         
 def Disconnect():
-    for i in range(1,csLen)
-            fwrite(cs(i).controller,103,'uint8') #turn backlight off
-            cs(i) = Grating_C2M(cs(i)) #get data from controller  %collect serial data if any still available
-            fclose(cs(i).controller) #close connection to controller
+    ser.write(103) #turn backlight off
+    cs = Grating_C2M(cs) #get data from controller  %collect serial data if any still available
+    #fclose(cs(i).controller) #close connection to controller
         
 def Send-Parameters():
-    for i in range(1,csLen)
-            fwrite(cs(i).controller,101,'uint8') #send grating parameter values to controller
-            cs(i) = Grating_M2C(cs(i)) 
+   ser.write(101) #send grating parameter values to controller
+    cs = Grating_M2C(cs) 
     
 
 def Fill-Background():
-    for i in range(1,csLen)
-            fwrite(cs(i).controller,102,'uint8') #fill display with background color
-            time.sleep(1) #wait for display to fill
+    ser.write(102) #fill display with background color
+    time.sleep(1) #wait for display to fill
         
 
 def Backlight-Off():
-    for i in range(1,csLen)
-            fwrite(cs(i).controller,103,'uint8') #turns display backlight off
+   ser.write(103) #turns display backlight off
         
         
 def Backlight-On():
-    for i in range(1,csLen)
-            fwrite(cs(i).controller,104,'uint8') #turns display backlight on
+    ser.write(104) #turns display backlight on
     
         
 def Start-Grating():
-    for i in range(1,csLen)
-            fwrite(cs(i).controller,105,'uint8') #start gratings of current parameters
+    ser.write(105) #start gratings of current parameters
             
 def Start-Flicker():
-    for i in range(1,csLen)
-            fwrite(cs(i).controller,106,'uint8') #start gratings of current parameters
+      ser.write(106) #start gratings of current parameters
     
         
 def Get-Data():
-    for i in range(1,csLen)
-            cs(i) = Grating_C2M(cs(i)) #get data from controller      
+     cs = Grating_C2M(cs) #get data from controller      
         
       
 def default():
