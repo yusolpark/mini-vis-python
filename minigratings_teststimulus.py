@@ -2,13 +2,14 @@
 cs = c_com(cs, 'Connect')
 
 class CS (object):
-    def __init__(self, port, expname, directory, trial_duration, randomize):
+    def __init__(self, port, expname, directory, trial_duration, randomize,data,controller):
         self.port = port 
         self.expname = expname
         self.directory = directory
         self.trial_duration = trial_duration
         self.randomize = randomize #1=randomize order of conditions, 0=don't randomize
         self.data = data #where data is saved 
+        self.controller = controller
 
 
 class PAR(object):
