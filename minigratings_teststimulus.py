@@ -1,4 +1,5 @@
 #open connection to controller
+from c_com_ifelse import c_com
 cs = c_com(cs, 'Connect')
 
 class CS (object):
@@ -28,16 +29,16 @@ class PAR(object):
         self.output = output # value of controller's output signal while grating is shown (V) [0-5]
 
 #set starting/default grating parameters
-param1 = PAR(100,[0 0 30],[0 0 0],[0 0 15],20,1,0,1.5,[0, 0],0,2,5)
+param = PAR(100,[0, 0, 30],[0, 0 ,0],[0, 0 ,15],20,1,0,1.5,[0, 0],0,2,5)
 
 #set experiment parameters
-cs = CS('COM7','directional_test_stimulus1', 'Users/Matthew/Documents/Schaffer-Nishimura Lab/Visual Stimulation/Data', 3, 0) 
+cs = CS('COM7','directional_test_stimulus1', 'Users/Matthew/Documents/Schaffer-Nishimura Lab/Visual Stimulation/Data', 3, 0, data, controller) 
 
 cs = c_com(cs, 'Send-Parameters') #send grating parameters to controller
 cs = c_com(cs, 'Fill-Background') #fill display with background color
 
 ## send stimulus
-#param1.angle = 0
+#param.angle = 0
 
 import time 
 start_time = time.time()
