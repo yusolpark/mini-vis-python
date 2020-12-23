@@ -1,20 +1,18 @@
 #open connection to controller
 from c_com import c_com
-from Grating_C2M import grating_C2M
-from Grating_M2C import grating_M2C
-
-c_com('Connect')
+import serial
+ser = serial.Serial('/dev/cu.usbmodem14101',9600) 
+#c_com('Connect')
 
 class CS (object):
-    def __init__(self, port, expname, directory, trial_duration, randomize,data,controller):
-        self.port = port 
+    def __init__(self, expname, directory, trial_duration, randomize,data,controller,datanames):
         self.expname = expname
         self.directory = directory
         self.trial_duration = trial_duration
         self.randomize = randomize #1=randomize order of conditions, 0=don't randomize
         self.data = data #where data is saved 
         self.controller = controller
-
+        self.datanames = datanames
 
 class PAR(object):
     def __init__(self, readdelay, bar1color, bar2color, backgroundcolor, barwidth, numgratings,angle, frequency, position, predelay, duration, output):
@@ -36,19 +34,23 @@ class PAR(object):
 param = PAR(100,[1, 2, 3],[4, 5 ,6],[7, 8 , 9],20,1,30,1,[10, 10],0,2,5)
 
 #set experiment parameters
-#cs = CS('COM7','directional_test_stimulus1', 'Users/Matthew/Documents/Schaffer-Nishimura Lab/Visual Stimulation/Data', 3, 0, None, None) 
-cs = CS('/dev/cu.usbmodem14101', 'directional_test_stimulus1','/Users/yusolpark/python/mini-vis-python', 3, 0, None, None)
+#cs = CS('COM7','directional_test_stimulus1', 'Users/Matthew/Documents/Schaffer-Nishimura Lab/Visual Stimulation/Data', 3, 0, None, None,None) 
+cs = CS('directional_test_stimulus1','/Users/yusolpark/python/mini-vis-python', 3, 0, None, None,{'counter', 'time', 'trial', 'repetition', 'readdelay', 
+'bar1red', 'bar1green', 'bar1blue', 'bar2red', 'bar2green', 'bar2blue', 'backred', 
+'backgreen', 'backblue', 'barwidth', 'numgratings', 'angle', 'frequency', 
+'position1', 'position2', 'predelay', 'duration', 'output', 'benchmark'})
 
-c_com('Send-Parameters', param) #send grating parameters to controller
-c_com('Fill-Background') #fill display with background color
+
+c_com('Send-Parameters', cs,ser, param) #send grating parameters to controller
+c_com('Fill-Background',cs,ser) #fill display with background color
 
 ## send stimulus
 #param.angle = 0
 
 import time 
 start_time = time.time()
-c_com('Send-Parameters', param) #send grating parameters to controller
-c_com('Start-Grating') #start gratings
+c_com('Send-Parameters', cs, ser,param) #send grating parameters to controller
+c_com('Start-Grating',cs,ser) #start gratings
 
 current_time = time.time()
 elapsed_time = current_time - start_time
@@ -57,7 +59,7 @@ while elapsed_time < cs.trial_duration : #delay until next trial
     time.sleep(0.001)
 
 #end_time = time.time();
-c_com('Get-Data') #retrieve data sent from controller
+c_com('Get-Data',cs, ser) #retrieve data sent from controller
 #cs.data = cs
 
 ## save data for current experiment
@@ -77,6 +79,6 @@ with open (filename,'wb') as f:
 # File = open(completeName,'cs')
 
 # close connection
-c_com('Disconnect') #close connection to controller
+c_com('Disconnect',cs,ser) #close connection to controller
 
 print (cs.data)
