@@ -1,5 +1,5 @@
-def grating_M2C(cs,param):
-
+def grating_M2C():
+    from minigratings_teststimulus import param, cs
     '''
     FUNCTION cs = Grating_M2C(cs)
 
@@ -43,7 +43,7 @@ def grating_M2C(cs,param):
     assert all(param.backgroundcolor %1 ==0),"background color values must be integers"
 
     #check that bar width is within allowed range
-    assert param.barwidth % 1 ==0 and cs.param.barwidth>0 and cs.param.barwidth<=60,"bar width must be an integer between 1-60"
+    assert param.barwidth % 1 ==0 and param.barwidth>0 and param.barwidth<=60,"bar width must be an integer between 1-60"
 
     #check that number of gratings is within allowed range
     assert param.numgratings % 1 ==0 and param.numgratings>0 and param.numgratings<=60,"num gratings must be an integer between 1-60"
@@ -99,21 +99,20 @@ def grating_M2C(cs,param):
 
     ## send parameters to controller if no errors found
     import serial 
-    with serial.Serial('/dev/cu.usbmodem142101',9600) as ser:
-        cs.controller = ser
-        
-        cs.controller.write(param.readdelay)
-        cs.controller.write(param.bar1color)
-        cs.controller.write(param.bar2color)
-        cs.controller.write(param.backgroundcolor)
-        cs.controller.write(param.barwidth)
-        cs.controller.write(param.numgratings)
-        cs.controller.write(param.angle2b)
-        cs.controller.write(param.frequency*10) #converts frequency to units of 100 mHz for uint8 data transfer
-        cs.controller.write(param.position)
-        cs.controller.write(param.predelay*10) #converts pre delay to units of 100 ms for uint8 data transfer
-        cs.controller.write(param.duration*10) #converts duration to units of 100 ms for uint8 data transfer
-        cs.controller.write(round(param.output*255/5)) #convert 0-5 V range to 1 byte (0-255)],'uint8')
+    with serial.Serial('/dev/cu.usbmodem14101',9600) as ser:
 
+        ser.write(param.readdelay)
+        ser.write(param.bar1color)
+        ser.write(param.bar2color)
+        ser.write(param.backgroundcolor)
+        ser.write(param.barwidth)
+        ser.write(param.numgratings)
+        ser.write(param.angle2b)
+        ser.write(param.frequency*10) #converts frequency to units of 100 mHz for uint8 data transfer
+        ser.write(param.position)
+        ser.write(param.predelay*10) #converts pre delay to units of 100 ms for uint8 data transfer
+        ser.write(param.duration*10) #converts duration to units of 100 ms for uint8 data transfer
+        ser.write(round(param.output*255/5)) #convert 0-5 V range to 1 byte (0-255)],'uint8')
+ 
             
    
