@@ -41,25 +41,27 @@ cs = CS('directional_test_stimulus1','/Users/yusolpark/python/mini-vis-python', 
 'position1', 'position2', 'predelay', 'duration', 'output', 'benchmark'})
 
 
-c_com('Send-Parameters', cs,ser, param) #send grating parameters to controller
-c_com('Fill-Background',cs,ser) #fill display with background color
+cs = c_com('Send-Parameters', cs,ser, param) #send grating parameters to controller
+cs = c_com('Fill-Background',cs,ser) #fill display with background color
 
 ## send stimulus
 #param.angle = 0
 
 import time 
 start_time = time.time()
-c_com('Send-Parameters', cs, ser,param) #send grating parameters to controller
-c_com('Start-Grating',cs,ser) #start gratings
+cs = c_com('Send-Parameters', cs, ser,param) #send grating parameters to controller
+cs = c_com('Start-Gratings',cs,ser) #start gratings
 
 current_time = time.time()
 elapsed_time = current_time - start_time
 
-while elapsed_time < cs.trial_duration : #delay until next trial
-    time.sleep(0.001)
+#while elapsed_time < cs.trial_duration : #delay until next trial
+ #   time.sleep(0.001)
+
+time.sleep(cs.trial_duration)
 
 #end_time = time.time();
-c_com('Get-Data',cs, ser) #retrieve data sent from controller
+cs = c_com('Get-Data',cs, ser) #retrieve data sent from controller
 #cs.data = cs
 
 ## save data for current experiment
@@ -79,6 +81,6 @@ with open (filename,'wb') as f:
 # File = open(completeName,'cs')
 
 # close connection
-c_com('Disconnect',cs,ser) #close connection to controller
+cs = c_com('Disconnect',cs,ser) #close connection to controller
 
 print (cs.data)

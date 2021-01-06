@@ -19,7 +19,7 @@ def c_com(command, cs, ser, param =0 ):
     #set-up
     from Grating_C2M import grating_C2M
     from Grating_M2C import grating_M2C
-    from minigratings_teststimulus import ser
+
 
     import time
     
@@ -31,20 +31,21 @@ def c_com(command, cs, ser, param =0 ):
         ser.write(b'104') #turns display backlight on
     elif command == 'Connect':
         ser.write(b'0') #command to send back version number
-        return grating_C2M(cs) #read version number
+        return grating_C2M(cs,ser) #read version number
     elif command == 'Disconnect':
         ser.write(b'103') #turn backlight off
-        return grating_C2M(cs) #get data from controller  %collect serial data if any still available
+        return grating_C2M(cs,ser) #get data from controller  %collect serial data if any still available
     elif command == 'Send-Parameters':
         ser.write(b'101') #send grating parameter values to controller
-        return grating_M2C(ser,param) 
+        grating_M2C(cs,ser,param) 
     elif command == 'Fill-Background':
         ser.write(b'102') #fill display with background color
         time.sleep(1) #wait for display to fill
     elif command == 'Start-Flicker':
         ser.write(b'106') #start gratings of current parameters
     elif command == 'Get-Data':
-        return grating_C2M() #get data from controller      
+        return grating_C2M(cs,ser) #get data from controller      
     else:
         raise ValueError(f"Command {command} not recognized. Type \"help Controller_stimcomm\" for list of valid commands")
-
+    
+    return cs

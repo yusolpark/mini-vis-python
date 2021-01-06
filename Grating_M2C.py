@@ -1,5 +1,5 @@
-def grating_M2C(ser, param):
-    from minigratings_teststimulus import param, cs
+def grating_M2C(cs,ser, param):
+   
     '''
     FUNCTION cs = Grating_M2C(cs)
 
@@ -29,18 +29,31 @@ def grating_M2C(ser, param):
     assert param.readdelay>0 and param.readdelay<=255 , "readdelay value must be integer between 1-255"
 
     #check that color values are integers within range for 16-bit color
-    assert param.bar1color(1)>= 0 and param.bar1color(1)<32,"red value of bar 1 must be between 0-31"
-    assert param.bar1color(2)>=0 and param.bar1color(2)<64,"green value of bar 1 must be between 0-63"
-    assert param.bar1color(3)>=0 and param.bar1color(3)<32,"blue value of bar 1 must be between 0-31"
-    assert param.bar2color(1)>=0 and param.bar2color(1)<32,"red value of bar 2 must be between 0-31"
-    assert param.bar2color(2)>=0 and param.bar2color(2)<64,"green value of bar 2 must be between 0-63"
-    assert param.bar2color(3)>=0 and param.bar2color(3)<32,"blue value of bar 2 must be between 0-31"
-    assert param.backgroundcolor(1)>=0 and param.backgroundcolor(1)<32,"red value of background must be between 0-31"
-    assert param.backgroundcolor(2)>=0 and param.backgroundcolor(2)<64,"green value of background must be between 0-63"
-    assert param.backgroundcolor(3)>=0 and param.backgroundcolor(3)<32,"blue value of background must be between 0-31"
-    assert all( param.bar1color % 1 == 0),"bar 1 color values must be integers"
-    assert all(param.bar2color % 1 ==0),"bar 2 color values must be integers"
-    assert all(param.backgroundcolor %1 ==0),"background color values must be integers"
+    assert param.bar1color[0]>=0 and param.bar1color[0]<32,"red value of bar 1 must be between 0-31"
+    assert param.bar1color[1]>=0 and param.bar1color[1]<64,"green value of bar 1 must be between 0-63"
+    assert param.bar1color[2]>=0 and param.bar1color[2]<32,"blue value of bar 1 must be between 0-31"
+    assert param.bar2color[0]>=0 and param.bar2color[0]<32,"red value of bar 2 must be between 0-31"
+    assert param.bar2color[1]>=0 and param.bar2color[1]<64,"green value of bar 2 must be between 0-63"
+    assert param.bar2color[2]>=0 and param.bar2color[2]<32,"blue value of bar 2 must be between 0-31"
+    assert param.backgroundcolor[0]>=0 and param.backgroundcolor[0]<32,"red value of background must be between 0-31"
+    assert param.backgroundcolor[1]>=0 and param.backgroundcolor[1]<64,"green value of background must be between 0-63"
+    assert param.backgroundcolor[2]>=0 and param.backgroundcolor[2]<32,"blue value of background must be between 0-31"
+    
+    for x in range(3): 
+        if param.bar1color[x] % 1 != 0 : 
+            raise ValueError("bar 1 color values must be integers")
+    
+    for x in range(3):   
+        if param.bar2color[x] % 1 != 0 : 
+            raise ValueError("bar 2 color values must be integers")
+    
+    for x in range(3): 
+        if param.backgroundcolor[x] % 1 != 0 : 
+            raise ValueError("backgroundcolor values must be integers")
+
+    #assert all(param.bar1color % 1 == 0),"bar 1 color values must be integers"
+    #assert all(param.bar2color % 1 ==0),"bar 2 color values must be integers"
+    #assert all(param.backgroundcolor %1 ==0),"background color values must be integers"
 
     #check that bar width is within allowed range
     assert param.barwidth % 1 ==0 and param.barwidth>0 and param.barwidth<=60,"bar width must be an integer between 1-60"
@@ -69,10 +82,17 @@ def grating_M2C(ser, param):
 
 
     #check that position is in allowed range
-    assert all(param.barwidth %1 ==0) and all(param.position>=-max_size) and all(param.position<=max_size),f"bar width must be an integer between +/- {max_size}"
+    if param.barwidth %1 !=0:
+        print(f"bar width must be an integer between +/- {max_size}")
+
+    for x in range(2):
+        if param.position[x]<-max_size or param.position[x]>max_size:
+            raise ValueError(f"bar width must be an integer between +/- {max_size}")
 
     #check that position will not cause grating to be clipped
-    assert all(abs(param.position)+param.barwidth*param.numgratings<= max_size) , "grating of current size/position will not fit inside viewable area"
+    for x in range(2):
+        if abs(param.position[x])+param.barwidth*param.numgratings > max_size:
+            raise ValueError("grating of current size/position will not fit inside viewable area")
 
     #check that duration is within range
     assert param.duration>=0 and param.duration<=25.5,"duration must be between 0-25.5 seconds"
