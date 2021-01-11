@@ -24,25 +24,25 @@ def c_com(command, cs, ser, param =0 ):
     import time
     
     if command == 'Start-Gratings':
-        ser.write(b'105') #start gratings of current parameters
+        ser.write(bytearray([105])) #start gratings of current parameters
     elif command == 'Backlight-Off':
-        ser.write(b'103') #turns display backlight off
+        ser.write(bytearray([103])) #turns display backlight off
     elif command == 'Backlight-On':
-        ser.write(b'104') #turns display backlight on
+        ser.write(bytearray([104])) #turns display backlight on
     elif command == 'Connect':
-        ser.write(b'0') #command to send back version number
+        ser.write(bytearray([0])) #command to send back version number
         return grating_C2M(cs,ser) #read version number
     elif command == 'Disconnect':
-        ser.write(b'103') #turn backlight off
+        ser.write(bytearray([103])) #turn backlight off
         return grating_C2M(cs,ser) #get data from controller  %collect serial data if any still available
     elif command == 'Send-Parameters':
-        ser.write(b'101') #send grating parameter values to controller
+        ser.write(bytes([101])) #send grating parameter values to controller
         grating_M2C(cs,ser,param) 
     elif command == 'Fill-Background':
-        ser.write(b'102') #fill display with background color
+        ser.write(102) #fill display with background color
         time.sleep(1) #wait for display to fill
     elif command == 'Start-Flicker':
-        ser.write(b'106') #start gratings of current parameters
+        ser.write(bytearray([106])) #start gratings of current parameters
     elif command == 'Get-Data':
         return grating_C2M(cs,ser) #get data from controller      
     else:

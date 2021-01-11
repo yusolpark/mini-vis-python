@@ -29,9 +29,15 @@ class PAR(object):
         self.duration = duration # duration that grating pattern is shown (s) [0.1-25.5]
         self.output = output # value of controller's output signal while grating is shown (V) [0-5]
 
+import struct
 #set starting/default grating parameters
-#param = PAR(100,[0, 0, 30],[0, 0 ,0],[0, 0 ,15],20,1,0,1.5,[0, 0],0,2,5)
-param = PAR(100,[1, 2, 3],[4, 5 ,6],[7, 8 , 9],20,1,30,1,[10, 10],0,2,5)
+#param = PAR(int_to_bytes(10),bytes([0, 0, 30]),bytes([0, 0 ,0]),bytes([0, 0 ,15]),20,1,0,2,[0, 0],0,2,5)
+#param = PAR(100,b'\x00\x00\x1d',byterarray(b'\x00\x00\x00'),bytearray(b'\x00\x00\x1f'),20,1,0,2,[0, 0],0,2,5)
+#param = PAR(struct.pack("B", 100),[0, 0, 30],[4, 5 ,6],[7, 8,9],20,1,30,1,[10, 10],0,2,5)
+param = PAR(100,[1, 2, 3],[4, 5 ,6],[7, 8, 9],20,1,29,1,[10, 10],0,2,5)
+#print(param.bar1color)
+#print(param.readdelay)
+
 
 #set experiment parameters
 #cs = CS('COM7','directional_test_stimulus1', 'Users/Matthew/Documents/Schaffer-Nishimura Lab/Visual Stimulation/Data', 3, 0, None, None,None) 
@@ -63,12 +69,27 @@ time.sleep(cs.trial_duration)
 #end_time = time.time();
 cs = c_com('Get-Data',cs, ser) #retrieve data sent from controller
 #cs.data = cs
+param = PAR(20,[8, 7, 6],[4, 5 ,6],[7, 8, 9],20,1,29,1,[10, 10],0,2,5)
+
+cs = c_com('Send-Parameters', cs,ser, param) #send grating parameters to controller
+cs = c_com('Fill-Background',cs,ser) #fill display with background color
+import time 
+start_time = time.time()
+cs = c_com('Send-Parameters', cs, ser,param) #send grating parameters to controller
+cs = c_com('Start-Gratings',cs,ser) #start gratings
+
+current_time = time.time()
+elapsed_time = current_time - start_time
+time.sleep(cs.trial_duration)
+
+#end_time = time.time();
+cs = c_com('Get-Data',cs, ser) #retrieve data sent from controller
 
 ## save data for current experiment
 filename =  time.strftime("%Y-%m-%d %H-%M-%S")+' '+cs.expname+' CS.py'
 
 import os
-newfolder = os.path.basename
+newfolder = str(os.path.basename)
 
 if not os.path.exists(newfolder):
     os.makedirs(newfolder)

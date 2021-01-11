@@ -73,7 +73,8 @@ def grating_M2C(cs,ser, param):
 
 
     #separate angle into 2 bytes
-    param.angle2b = min(180, param.angle), max(0, param.angle-180)
+    #param.angle2b = min(180, param.angle), max(0, param.angle-180)
+    param.angle2b = bytearray([min(180, param.angle), max(0, param.angle-180)])
 
     #check that frequency is within range
     if (param.frequency*10) % 1 > 0:
@@ -118,18 +119,18 @@ def grating_M2C(cs,ser, param):
 
 
     ## send parameters to controller if no errors found
-    ser.write(param.readdelay)
-    ser.write(param.bar1color)
-    ser.write(param.bar2color)
-    ser.write(param.backgroundcolor)
-    ser.write(param.barwidth)
-    ser.write(param.numgratings)
-    ser.write(param.angle2b)
-    ser.write(param.frequency*10) #converts frequency to units of 100 mHz for uint8 data transfer
-    ser.write(param.position)
-    ser.write(param.predelay*10) #converts pre delay to units of 100 ms for uint8 data transfer
-    ser.write(param.duration*10) #converts duration to units of 100 ms for uint8 data transfer
-    ser.write(round(param.output*255/5)) #convert 0-5 V range to 1 byte (0-255)],'uint8')
+    ser.write(bytes([param.readdelay]))
+    ser.write(bytearray(param.bar1color))
+    ser.write(bytearray(param.bar2color))
+    ser.write(bytearray(param.backgroundcolor))
+    ser.write(bytes([param.barwidth]))
+    ser.write(bytes([param.numgratings]))
+    ser.write(bytearray(param.angle2b))
+    ser.write(bytes([param.frequency*10])) #converts frequency to units of 100 mHz for uint8 data transfer
+    ser.write(bytearray(param.position))
+    ser.write(bytes([param.predelay*10])) #converts pre delay to units of 100 ms for uint8 data transfer
+    ser.write(bytes([param.duration*10])) #converts duration to units of 100 ms for uint8 data transfer
+    ser.write(bytes([round(param.output*255/5)])) #convert 0-5 V range to 1 byte (0-255)],'uint8')
  
             
    
