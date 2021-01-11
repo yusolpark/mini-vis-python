@@ -34,7 +34,7 @@ import struct
 #param = PAR(int_to_bytes(10),bytes([0, 0, 30]),bytes([0, 0 ,0]),bytes([0, 0 ,15]),20,1,0,2,[0, 0],0,2,5)
 #param = PAR(100,b'\x00\x00\x1d',byterarray(b'\x00\x00\x00'),bytearray(b'\x00\x00\x1f'),20,1,0,2,[0, 0],0,2,5)
 #param = PAR(struct.pack("B", 100),[0, 0, 30],[4, 5 ,6],[7, 8,9],20,1,30,1,[10, 10],0,2,5)
-param = PAR(100,[1, 2, 3],[4, 5 ,6],[7, 8, 9],20,1,29,1,[10, 10],0,2,5)
+param = PAR(2,[1, 2, 3],[4, 5 ,6],[7, 8, 9],20,1,29,1,[10, 10],0,2,5)
 #print(param.bar1color)
 #print(param.readdelay)
 
