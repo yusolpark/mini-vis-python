@@ -81,10 +81,11 @@ def grating_C2M(cs,ser):
             backgroundcolor[0], backgroundcolor[1], backgroundcolor[2], barwidth, numgratings, angle, frequency, position[0],position[1], 
             predelay, duration, output, benchmark]) 
             
+           
             if cs.data is None:
                 cs.data = addData
             else:
-                np.append = (cs.data, addData)  
+                cs.data = np.append(cs.data, addData,axis=0)
         elif msgtype == 225 :
             ID = ser.read(1)
             print(int.from_bytes(ser.read(1),"big") )

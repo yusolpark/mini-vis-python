@@ -68,21 +68,12 @@ time.sleep(cs.trial_duration)
 
 #end_time = time.time();
 cs = c_com('Get-Data',cs, ser) #retrieve data sent from controller
-#cs.data = cs
-param = PAR(20,[8, 7, 6],[4, 5 ,6],[7, 8, 9],20,1,29,1,[10, 10],0,2,5)
 
-cs = c_com('Send-Parameters', cs,ser, param) #send grating parameters to controller
-cs = c_com('Fill-Background',cs,ser) #fill display with background color
-import time 
-start_time = time.time()
+
+param.bar1color = [10, 11, 12]
 cs = c_com('Send-Parameters', cs, ser,param) #send grating parameters to controller
 cs = c_com('Start-Gratings',cs,ser) #start gratings
-
-current_time = time.time()
-elapsed_time = current_time - start_time
 time.sleep(cs.trial_duration)
-
-#end_time = time.time();
 cs = c_com('Get-Data',cs, ser) #retrieve data sent from controller
 
 ## save data for current experiment
@@ -104,4 +95,6 @@ with open (filename,'wb') as f:
 # close connection
 cs = c_com('Disconnect',cs,ser) #close connection to controller
 
+import numpy as np
+np.set_printoptions(suppress=True)
 print (cs.data)
