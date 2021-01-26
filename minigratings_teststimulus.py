@@ -1,7 +1,7 @@
 #open connection to controller
 from c_com import c_com
 import serial
-ser = serial.Serial('/dev/cu.usbmodem14101',9600) 
+ser = serial.Serial('/dev/cu.usbmodem14201',9600) 
 #c_com('Connect')
 
 class CS (object):
