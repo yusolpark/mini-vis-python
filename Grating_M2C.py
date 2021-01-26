@@ -126,11 +126,11 @@ def grating_M2C(cs,ser, param):
     ser.write(bytes([param.barwidth]))
     ser.write(bytes([param.numgratings]))
     ser.write(bytearray(param.angle2b))
-    ser.write(bytes([param.frequency*10])) #converts frequency to units of 100 mHz for uint8 data transfer
+    ser.write(bytes([int(param.frequency*10)])) #converts frequency to units of 100 mHz for uint8 data transfer
     ser.write(bytearray(param.position))
-    ser.write(bytes([param.predelay*10])) #converts pre delay to units of 100 ms for uint8 data transfer
-    ser.write(bytes([param.duration*10])) #converts duration to units of 100 ms for uint8 data transfer
-    ser.write(bytes([round(param.output*255/5)])) #convert 0-5 V range to 1 byte (0-255)],'uint8')
+    ser.write(bytes([int(param.predelay*10)])) #converts pre delay to units of 100 ms for uint8 data transfer
+    ser.write(bytes([int(param.duration*10)])) #converts duration to units of 100 ms for uint8 data transfer
+    ser.write(bytes([int(round(param.output*255/5))])) #convert 0-5 V range to 1 byte (0-255)],'uint8')
  
             
    
